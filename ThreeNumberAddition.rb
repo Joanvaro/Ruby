@@ -17,12 +17,14 @@ def getResults()
 
   data.each_index { |indx| 
     valueX = data[indx].to_i
-    valueY = data.size.eql?(indx) ? data.first.to_i : data[indx + 1].to_i 
-    valueZ = (valueX + valueY) * -1
+    for i in indx...data.size do
+      valueY = data.size.eql?(i) ? data.first.to_i : data[i].to_i 
+      valueZ = (valueX + valueY) * -1
 
-    if data.include?(valueZ) then
-      resultsFile.puts "#{valueX}, #{valueY}, #{valueZ}"
-      i += 1
+      if data.include?(valueZ) then
+        resultsFile.puts "#{valueX}, #{valueY}, #{valueZ}"
+        i += 1
+      end
     end
   }
 
