@@ -11,25 +11,41 @@ end
 
 def getResults()
   i = 0
-  resultsFile = File.new("results.txt", "w")
-  data = File.readlines("list.txt")
-  data.map!{|x| x.to_i}
+  values = Hash.new
 
-  data.each_index { |indx| 
-    valueX = data[indx].to_i
-    for i in indx...data.size do
-      valueY = data.size.eql?(i) ? data.first.to_i : data[i].to_i 
+  resultsFile = File.new("results.txt", "w")
+  data = File.open("list.txt","r")
+
+  data.each_line do |line|
+    key = line.to_i
+    if values.has_key?(key) then
+      values[key] += 1
+    else
+      values[key] = 1
+    end
+  end
+
+  data.close
+  values2 = values
+
+  values.each_key do |valX| 
+    valueX = valX.to_i
+    values2.delete(valX)
+
+    values2.each_key do |valY|
+      valueY = valY.to_i
       valueZ = (valueX + valueY) * -1
 
-      if data.include?(valueZ) then
+      if values2.has_key?(valueZ) and values2[valueZ] > 1 then
         resultsFile.puts "#{valueX}, #{valueY}, #{valueZ}"
         i += 1
       end
     end
-  }
+  end
 
   resultsFile.puts "The total of posiible combination is #{i}"
-  resultsFile.close
+  resultsFile.close 
+
 end
 
 createFileWithRandomNumbers(ARGV[0].to_i)
