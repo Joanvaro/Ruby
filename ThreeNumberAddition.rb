@@ -1,5 +1,9 @@
 #!/usr/bin/ruby
 
+require 'time'
+
+startTime = Time.now
+
 def createFileWithRandomNumbers(numberOfElements)
   file = File.new("list.txt", "w")
   elements = Array.new(numberOfElements) { rand(-100...100) }
@@ -14,7 +18,8 @@ def getResults()
   values = Hash.new
 
   resultsFile = File.new("results.txt", "w")
-  data = File.open("list.txt","r")
+  #data = File.open("list.txt","r")
+  data = File.open("example.txt","r")
 
   data.each_line do |line|
     key = line.to_i
@@ -29,6 +34,7 @@ def getResults()
   values2 = values
 
   values.each_key do |valX| 
+    previousValues = Array.new
     valueX = valX.to_i
     values2.delete(valX)
 
@@ -36,10 +42,20 @@ def getResults()
       valueY = valY.to_i
       valueZ = (valueX + valueY) * -1
 
-      if values2.has_key?(valueZ) and values2[valueZ] > 1 then
-        resultsFile.puts "#{valueX}, #{valueY}, #{valueZ}"
-        i += 1
+      if values2.has_key?(valueZ) and !(previousValues.include?(valueZ)) then
+        if (valueY == valueZ or valueX == valueZ) then
+          if values2[valueZ] > 1 then
+            resultsFile.puts "#{valueX}, #{valueY}, #{valueZ}"
+            i += 1
+          end
+        else
+            resultsFile.puts "#{valueX}, #{valueY}, #{valueZ}"
+            i += 1
+        end
       end
+
+      previousValues.push(valueY)
+
     end
   end
 
@@ -50,4 +66,6 @@ end
 
 createFileWithRandomNumbers(ARGV[0].to_i)
 getResults()
+endTime = Time.now
+puts "Total Time of execution #{endTime - startTime} seconds"
 puts "Completed!"
