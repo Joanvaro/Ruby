@@ -43,12 +43,7 @@ def getResults()
       valueZ = (valueX + valueY) * -1
 
       if values2.has_key?(valueZ) and !(previousValues.include?(valueZ)) then
-        if (valueY == valueZ or valueX == valueZ) then
-          if values2[valueZ] > 1 then
-            resultsFile.puts "#{valueX}, #{valueY}, #{valueZ}"
-            i += 1
-          end
-        else
+        unless (valueY == valueZ or valueX == valueZ) and (values2[valueZ] == 1)  then
             resultsFile.puts "#{valueX}, #{valueY}, #{valueZ}"
             i += 1
         end
